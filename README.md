@@ -4,7 +4,7 @@
 - Typescript
 - Redux
 - React Navigation
-- Firebase Auth | React Native Firebase
+- [Optional] Firebase Auth
 
 > Note: Only Android Tested
 
