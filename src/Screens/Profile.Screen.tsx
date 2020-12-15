@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { Button, Text } from 'react-native';
 
-import CenterText from '../Components/CenterText';
+import { AuthContext, AuthContextType } from '../Auth/AuthProvider';
+import Center from '../Components/Wrapper/Center';
 
 const ProfileScreen: React.FC<{}> = () => {
-  return <CenterText text="Profile Screen" />;
+  const {logout} = useContext<AuthContextType>(AuthContext);
+
+  return (
+    <Center>
+      <Text>Profile Screen</Text>
+      <Button title="Logout" onPress={logout} />
+    </Center>
+  );
 };
 
 export default ProfileScreen;
