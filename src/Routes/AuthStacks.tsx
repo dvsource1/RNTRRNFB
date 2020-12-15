@@ -7,19 +7,26 @@ import HomeScreen from '../Screens/Home.Screen';
 import IntroScreen from '../Screens/Intro.Screen';
 import LoginScreen from '../Screens/Login.Screen';
 import RegisterScreen from '../Screens/Register.Screen';
+import { AUTH_STACK_ROUTES } from '../Utils/Constants';
 
 const AuthStack = createStackNavigator<AuthStackParamList>();
 
 const AuthStacks = () => {
   return (
     <AuthStack.Navigator screenOptions={{header: () => null}}>
-      <AuthStack.Screen name={AuthStackRoute.Intro} component={IntroScreen} />
-      <AuthStack.Screen name={AuthStackRoute.Login} component={LoginScreen} />
       <AuthStack.Screen
-        name={AuthStackRoute.Register}
+        name={AUTH_STACK_ROUTES.INTRO}
+        component={IntroScreen}
+      />
+      <AuthStack.Screen
+        name={AUTH_STACK_ROUTES.LOGIN}
+        component={LoginScreen}
+      />
+      <AuthStack.Screen
+        name={AUTH_STACK_ROUTES.REGISTER}
         component={RegisterScreen}
       />
-      <AuthStack.Screen name={AuthStackRoute.Home} component={HomeScreen} />
+      <AuthStack.Screen name={AUTH_STACK_ROUTES.HOME} component={HomeScreen} />
     </AuthStack.Navigator>
   );
 };
@@ -37,10 +44,3 @@ type AuthStackParamList = {
   Register: undefined;
   Home: undefined;
 };
-
-export namespace AuthStackRoute {
-  export const Intro = 'Intro';
-  export const Login = 'Login';
-  export const Register = 'Register';
-  export const Home = 'Home';
-}
