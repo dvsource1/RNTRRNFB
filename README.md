@@ -1,3 +1,7 @@
 # dvsource/RNTRRNFB
-### React Native Boilerplate
-### Typescript + Resux + React Navigation + Firebase Auth
+#### React Native Boilerplate
+
+- Typescript
+- Redux
+- React Navigation
+- Firebase Auth | React Native Firebase
