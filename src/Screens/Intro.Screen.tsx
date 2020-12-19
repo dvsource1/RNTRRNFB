@@ -9,7 +9,6 @@ const IntroScreen: React.FC<
   AuthStackPropType<typeof AUTH_STACK_ROUTES.INTRO>
 > = ({navigation}: AuthStackPropType<typeof AUTH_STACK_ROUTES.INTRO>) => {
   const onGoToLogin = () => {
-    console.log('GO TO LOGIN');
     navigation.navigate(AUTH_STACK_ROUTES.LOGIN);
   };
 

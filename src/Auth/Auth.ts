@@ -1,0 +1,11 @@
+export enum AuthMethod {
+  FB_EMAIL_PASSWORD,
+  FB_GOOGLE,
+  FB_FACEBOOK,
+  FB_TWITTER,
+  FB_GITHUB,
+  FB_MICROSOFT,
+  FB_APPLE,
+  FB_PHONE,
+  FB_ANONYMOUS,
+}

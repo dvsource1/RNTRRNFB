@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 
+import { AuthMethod } from '../Auth/Auth';
 import { AuthContext, AuthContextType } from '../Auth/AuthProvider';
 import SplashScreen from '../Screens/Splash.Screen';
 import { AS } from '../Utils/Constants';
@@ -17,13 +18,11 @@ const RootRoutes: React.FC<{}> = () => {
     AsyncStorage.getItem(AS.USER)
       .then((currentUser: string | null) => {
         if (currentUser) {
-          login(JSON.parse(currentUser));
+          login(JSON.parse(currentUser), AuthMethod.FB_EMAIL_PASSWORD);
         }
         setLoading(false);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, []);
 
   if (loading) {

@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Button, Text } from 'react-native';
 
+import { AuthMethod } from '../Auth/Auth';
 import { AuthContext, AuthContextType } from '../Auth/AuthProvider';
 import Center from '../Components/Wrapper/Center';
 import { User } from '../Models/User';
@@ -12,9 +13,13 @@ const LoginScreen: React.FC<
 > = ({navigation}: AuthStackPropType<typeof AUTH_STACK_ROUTES.LOGIN>) => {
   const {login} = useContext<AuthContextType>(AuthContext);
 
-  const onLogin = () => {
-    const loggedUser: User = {username: 'dv'};
-    login(loggedUser);
+  const onLogin = async () => {
+    const loggedUser: User = {
+      username: 'dv',
+      email: 'mytest.mail@gmail.com',
+      password: 'admin123',
+    };
+    await login(loggedUser, AuthMethod.FB_EMAIL_PASSWORD);
   };
 
   const onGoToRegister = () => {
