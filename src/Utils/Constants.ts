@@ -14,3 +14,8 @@ export namespace HOME_TAB_ROUTES {
   export const DASHBOARD = 'Dashboard';
   export const PROFILE = 'Profile';
 }
+
+export namespace AUTH {
+  export const WEB_CLIENT_ID =
+    '52555011604-7hp46vt9qsre4v02o3r40ilo3ng2rapk.apps.googleusercontent.com';
+}

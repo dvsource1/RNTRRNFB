@@ -2,45 +2,48 @@ import React, { ReactNode, useState } from 'react';
 
 import AsyncStorage from '@react-native-community/async-storage';
 
+import { AuthUser } from '../Models/AuthUser';
 import { User } from '../Models/User';
+import AuthService from '../Services/AuthService';
+import { ErrorHandler } from '../Services/Handlers/ErrorHandler';
 import { AS } from '../Utils/Constants';
-import { AuthMethod } from './Auth';
-import AuthService from './AuthService';
 
 export const AuthContext = React.createContext<AuthContextType>({
-  user: null,
+  authUser: null,
   login: () => Promise.resolve(null),
   logout: () => Promise.resolve(),
 });
 
 const AuthProvider: React.FC<PropsType> = ({children}: PropsType) => {
-  const [user, setUser] = useState<User>(null);
+  const [authUser, setAuthUser] = useState<AuthUser>(null);
 
-  const Login: (user: User, authMethod: AuthMethod) => Promise<User> = async (
-    user: User,
-    authMethod: AuthMethod,
-  ) => {
+  const Login: (authUser: AuthUser) => Promise<User> = async (
+    authUser: AuthUser,
+  ): Promise<User> => {
     return new AuthService()
-      .Login(user, authMethod)
-      .then((data) => {
-        setUser(user);
-        AsyncStorage.setItem(AS.USER, JSON.stringify(user));
+      .Login(authUser)
+      .then((authUser: AuthUser) => {
+        setAuthUser(authUser);
+        AsyncStorage.setItem(AS.USER, JSON.stringify(authUser));
+        const {user} = authUser!;
         return Promise.resolve<User>(user);
       })
       .catch((error) => {
+        ErrorHandler.HandleAuthError(error);
         return Promise.reject('USER LOGGING FAILED');
       });
   };
 
-  const Logout: () => Promise<void> = async () => {
+  const Logout: () => Promise<void> = async (): Promise<void> => {
     return new AuthService()
       .Logout()
       .then(() => {
-        setUser(null);
+        setAuthUser(null);
         AsyncStorage.removeItem(AS.USER);
         return Promise.resolve();
       })
       .catch((error) => {
+        ErrorHandler.HandleAuthError(error);
         return Promise.reject('USER LOGOUT FAILED');
       });
   };
@@ -48,7 +51,7 @@ const AuthProvider: React.FC<PropsType> = ({children}: PropsType) => {
   return (
     <AuthContext.Provider
       value={{
-        user,
+        authUser,
         login: Login,
         logout: Logout,
       }}>
@@ -64,7 +67,7 @@ type PropsType = {
 };
 
 export type AuthContextType = {
-  user: User;
-  login: (user: User, authMethod: AuthMethod) => Promise<User>;
+  authUser: AuthUser;
+  login: (authUser: AuthUser) => Promise<User>;
   logout: () => Promise<void>;
 };
