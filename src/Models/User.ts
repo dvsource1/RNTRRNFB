@@ -1,7 +1,11 @@
+import { UserCredential } from './UserCredential';
+
 export type User = IUser | null;
 
 interface IUser {
-  username: string;
-  email: string;
-  password: string;
+  uid?: string;
+  username?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  credential?: UserCredential;
 }

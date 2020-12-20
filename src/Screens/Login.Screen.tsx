@@ -4,7 +4,7 @@ import { Button, Text } from 'react-native';
 import { AuthMethod } from '../Auth/Auth';
 import { AuthContext, AuthContextType } from '../Auth/AuthProvider';
 import Center from '../Components/Wrapper/Center';
-import { User } from '../Models/User';
+import { AuthUser } from '../Models/AuthUser';
 import { AuthStackPropType } from '../Routes/AuthStacks';
 import { AUTH_STACK_ROUTES } from '../Utils/Constants';
 
@@ -13,13 +13,25 @@ const LoginScreen: React.FC<
 > = ({navigation}: AuthStackPropType<typeof AUTH_STACK_ROUTES.LOGIN>) => {
   const {login} = useContext<AuthContextType>(AuthContext);
 
-  const onLogin = async () => {
-    const loggedUser: User = {
-      username: 'dv',
-      email: 'mytest.mail@gmail.com',
-      password: 'admin123',
+  const onLoginWithEmailAndPassword = async () => {
+    const authUser: AuthUser = {
+      user: {
+        email: 'mytest.mail@gmail.com',
+        credential: {
+          password: 'admin123',
+        },
+      },
+      authMethod: AuthMethod.FB_EMAIL_PASSWORD,
     };
-    await login(loggedUser, AuthMethod.FB_EMAIL_PASSWORD);
+    await login(authUser);
+  };
+
+  const onLoginWithGoogle = async () => {
+    const authUser: AuthUser = {
+      user: null,
+      authMethod: AuthMethod.FB_GOOGLE,
+    };
+    await login(authUser);
   };
 
   const onGoToRegister = () => {
@@ -29,7 +41,8 @@ const LoginScreen: React.FC<
   return (
     <Center>
       <Text>Login Screen</Text>
-      <Button title="Login" onPress={onLogin} />
+      <Button title="Login" onPress={onLoginWithEmailAndPassword} />
+      <Button title="Login with Google" onPress={onLoginWithGoogle} />
       <Button title="Register" onPress={onGoToRegister} />
     </Center>
   );

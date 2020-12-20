@@ -3,26 +3,29 @@ import React, { useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 
-import { AuthMethod } from '../Auth/Auth';
 import { AuthContext, AuthContextType } from '../Auth/AuthProvider';
 import SplashScreen from '../Screens/Splash.Screen';
+import { ErrorHandler } from '../Services/Handlers/ErrorHandler';
+import { AuthUserManager } from '../Services/Managers/AuthUserManager';
+import { UserManager } from '../Services/Managers/UserManager';
 import { AS } from '../Utils/Constants';
 import RootStacks from './AuthStacks';
 import HomeTabs from './HomeTabs';
 
 const RootRoutes: React.FC<{}> = () => {
-  const {user, login} = useContext<AuthContextType>(AuthContext);
+  const {authUser, login} = useContext<AuthContextType>(AuthContext);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     AsyncStorage.getItem(AS.USER)
       .then((currentUser: string | null) => {
         if (currentUser) {
-          login(JSON.parse(currentUser), AuthMethod.FB_EMAIL_PASSWORD);
+          login(AuthUserManager.GetAuthUser(currentUser));
         }
         setLoading(false);
       })
-      .catch((err) => {});
+      .catch(ErrorHandler.HandleAuthError);
+    setLoading(false);
   }, []);
 
   if (loading) {
@@ -30,7 +33,7 @@ const RootRoutes: React.FC<{}> = () => {
   } else {
     return (
       <NavigationContainer>
-        {user ? <HomeTabs /> : <RootStacks />}
+        {authUser ? <HomeTabs /> : <RootStacks />}
       </NavigationContainer>
     );
   }

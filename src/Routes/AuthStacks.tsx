@@ -7,9 +7,12 @@ import HomeScreen from '../Screens/Home.Screen';
 import IntroScreen from '../Screens/Intro.Screen';
 import LoginScreen from '../Screens/Login.Screen';
 import RegisterScreen from '../Screens/Register.Screen';
-import { AUTH_STACK_ROUTES } from '../Utils/Constants';
+import AuthService from '../Services/AuthService';
+import { AUTH, AUTH_STACK_ROUTES } from '../Utils/Constants';
 
 const AuthStack = createStackNavigator<AuthStackParamList>();
+
+AuthService.ConfigureGoogleSignin(AUTH.WEB_CLIENT_ID);
 
 const AuthStacks = () => {
   return (
