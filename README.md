@@ -5,6 +5,8 @@
 - Redux
 - React Navigation
 - [Optional] Firebase Auth
+  - Email & Password
+  - Google Signin
 
 > Note: Only Android Tested
 
