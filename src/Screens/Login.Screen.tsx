@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { Button, Text } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { ActivityIndicator, Button, Text } from 'react-native';
 
 import { AuthMethod } from '../Auth/Auth';
 import { AuthContext, AuthContextType } from '../Auth/AuthProvider';
@@ -11,9 +11,11 @@ import { AUTH_STACK_ROUTES } from '../Utils/Constants';
 const LoginScreen: React.FC<
   AuthStackPropType<typeof AUTH_STACK_ROUTES.LOGIN>
 > = ({navigation}: AuthStackPropType<typeof AUTH_STACK_ROUTES.LOGIN>) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const {login} = useContext<AuthContextType>(AuthContext);
 
   const onLoginWithEmailAndPassword = async () => {
+    setLoading(true);
     const authUser: AuthUser = {
       user: {
         email: 'mytest.mail@gmail.com',
@@ -27,6 +29,7 @@ const LoginScreen: React.FC<
   };
 
   const onLoginWithGoogle = async () => {
+    setLoading(true);
     const authUser: AuthUser = {
       user: null,
       authMethod: AuthMethod.FB_GOOGLE,
@@ -38,7 +41,17 @@ const LoginScreen: React.FC<
     navigation.navigate(AUTH_STACK_ROUTES.REGISTER);
   };
 
-  return (
+  useEffect(() => {
+    return () => {
+      setLoading(false);
+    };
+  }, []);
+
+  return loading ? (
+    <Center>
+      <ActivityIndicator size="large" color="#ff0000" />
+    </Center>
+  ) : (
     <Center>
       <Text>Login Screen</Text>
       <Button title="Login" onPress={onLoginWithEmailAndPassword} />

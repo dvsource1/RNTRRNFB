@@ -4,13 +4,15 @@ import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { AuthMethod } from '../Auth/Auth';
 import { AuthUser } from '../Models/AuthUser';
 import { User } from '../Models/User';
-import { CredentialManager } from './Managers/CreadentialManager';
+import { CredentialManager } from './Managers/CredentialManager';
 import { UserManager } from './Managers/UserManager';
 
 class AuthService {
   static ConfigureGoogleSignin = (webClientId: string) => {
     GoogleSignin.configure({webClientId});
   };
+
+  static password: string | undefined;
 
   Login: (authUser: AuthUser) => Promise<AuthUser> = (
     authUser: AuthUser,
@@ -35,10 +37,11 @@ class AuthService {
     // TODO: check null or undefined email password
     const email = UserManager.GetEmail(user)!;
     const password = UserManager.GetPassword(user)!;
+    AuthService.password = password;
     return auth()
       .signInWithEmailAndPassword(email, password)
-      .then(this.HandleUserCreadential)
-      .catch(this.HandleCreadentialErrors);
+      .then(this.HandleUserCredential)
+      .catch(this.HandleCredentialErrors);
   };
 
   private SignInWithGoogle: () => Promise<AuthUser> = async (): Promise<AuthUser> => {
@@ -51,8 +54,8 @@ class AuthService {
         if (googleCredential) {
           return auth()
             .signInWithCredential(googleCredential)
-            .then(this.HandleUserCreadential)
-            .catch(this.HandleCreadentialErrors);
+            .then(this.HandleUserCredential)
+            .catch(this.HandleCredentialErrors);
         } else {
           return Promise.reject('NULL AUTH CREDENTIAL');
         }
@@ -62,18 +65,23 @@ class AuthService {
       });
   };
 
-  private HandleUserCreadential: (
+  private HandleUserCredential: (
     userCredential: FirebaseAuthTypes.UserCredential,
   ) => Promise<AuthUser> = (
     userCredential: FirebaseAuthTypes.UserCredential,
   ): Promise<AuthUser> => {
     const user: User = CredentialManager.GetUser(userCredential)!;
+    // FIX: implement better solution
+    if (user && AuthService.password) {
+      user.credential = {password: AuthService.password};
+    }
+    AuthService.password = undefined;
     const authMethod = CredentialManager.GetAuthMethod(userCredential)!;
     const authUser: AuthUser = {user, authMethod};
     return Promise.resolve<AuthUser>(authUser);
   };
 
-  private HandleCreadentialErrors = (error: any) => Promise.reject(error);
+  private HandleCredentialErrors = (error: any) => Promise.reject(error);
 }
 
 export default AuthService;
