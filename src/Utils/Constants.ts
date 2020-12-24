@@ -18,4 +18,9 @@ export namespace HOME_TAB_ROUTES {
 export namespace AUTH {
   export const WEB_CLIENT_ID =
     '52555011604-7hp46vt9qsre4v02o3r40ilo3ng2rapk.apps.googleusercontent.com';
+
+  export namespace PROVIDER_ID {
+    export const GOOGLE_COM = 'google.com';
+    export const FACEBOOK_COM = 'facebook.com';
+  }
 }

@@ -2,6 +2,7 @@ import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 
 import { AuthMethod } from '../../Auth/Auth';
 import { User } from '../../Models/User';
+import { AUTH } from '../../Utils/Constants';
 
 export namespace CredentialManager {
   export const GetCredential: (
@@ -37,11 +38,13 @@ export namespace CredentialManager {
   ) => AuthMethod = (
     userCredential: FirebaseAuthTypes.UserCredential,
   ): AuthMethod => {
-    // TODO: replace with switch case
-    if (userCredential.additionalUserInfo?.providerId === 'google.com') {
-      return AuthMethod.FB_GOOGLE;
-    } else {
-      return AuthMethod.FB_EMAIL_PASSWORD;
+    switch (userCredential.additionalUserInfo?.providerId) {
+      case AUTH.PROVIDER_ID.GOOGLE_COM:
+        return AuthMethod.FB_GOOGLE;
+      case AUTH.PROVIDER_ID.FACEBOOK_COM:
+        return AuthMethod.FB_FACEBOOK;
+      default:
+        return AuthMethod.FB_EMAIL_PASSWORD;
     }
   };
 }

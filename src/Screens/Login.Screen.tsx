@@ -34,6 +34,14 @@ const LoginScreen: React.FC<
     await login(authUser);
   };
 
+  const onLoginWithFacebook = async () => {
+    const authUser: AuthUser = {
+      user: null,
+      authMethod: AuthMethod.FB_FACEBOOK,
+    };
+    await login(authUser);
+  };
+
   const onGoToRegister = () => {
     navigation.navigate(AUTH_STACK_ROUTES.REGISTER);
   };
@@ -43,6 +51,7 @@ const LoginScreen: React.FC<
       <Text>Login Screen</Text>
       <Button title="Login" onPress={onLoginWithEmailAndPassword} />
       <Button title="Login with Google" onPress={onLoginWithGoogle} />
+      <Button title="Login with Facebook" onPress={onLoginWithFacebook} />
       <Button title="Register" onPress={onGoToRegister} />
     </Center>
   );

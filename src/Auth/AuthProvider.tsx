@@ -23,6 +23,7 @@ const AuthProvider: React.FC<PropsType> = ({children}: PropsType) => {
     return new AuthService()
       .Login(authUser)
       .then((authUser: AuthUser) => {
+        console.log(authUser);
         setAuthUser(authUser);
         AsyncStorage.setItem(AS.USER, JSON.stringify(authUser));
         const {user} = authUser!;
